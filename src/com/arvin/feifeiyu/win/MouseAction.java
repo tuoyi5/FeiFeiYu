@@ -35,6 +35,7 @@ public class MouseAction extends MouseAdapter{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				//点击离开
+				System.out.println("setMouseAction, mouseClicked: ");
 				if(mouseListener != null) {
 					mouseListener.mouseClicked(e);
 				}
@@ -42,21 +43,37 @@ public class MouseAction extends MouseAdapter{
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
+				System.out.println("setMouseAction, mouseEntered: ");
 				//指向
+				if(mouseListener != null) {
+					mouseListener.mouseEntered(e);
+				}
 				setBackground(e.getSource(), Color.blue);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
+				System.out.println("setMouseAction, mouseExited: ");
 				//指向离开
+				if(mouseListener != null) {
+					mouseListener.mouseExited(e);
+				}
 				setPreBackground(e.getSource());
 			}
 			@Override
 			public void mousePressed(MouseEvent e) {
+				System.out.println("setMouseAction, mousePressed: ");
 				//保持点击
+				if(mouseListener != null) {
+					mouseListener.mousePressed(e);
+				}
 				setBackground(e.getSource(), Color.red);
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				System.out.println("setMouseAction, mouseReleased: ");
+				if(mouseListener != null) {
+					mouseListener.mouseReleased(e);
+				}
 				//setBackground(e.getSource(), proBackground);
 			}
 		};

@@ -52,6 +52,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.CardLayout;
 
 public class FeiFeiYuApplication {
 
@@ -97,7 +98,10 @@ public class FeiFeiYuApplication {
 		initBar();
 		initSplitPane();
 		initSplitPaneLeft();
-
+		initSplitPaneRight();
+		initOperationJPanel();
+		initSettingsJPanel();
+		initPreSettingsJPanel();
 	}
 	
 	public void initBar() {
@@ -118,32 +122,18 @@ public class FeiFeiYuApplication {
 	}
 	
 	JSplitPane jSplitPaneLeft, jSplitPaneV;
-	JPanel jPanel1, jPanel2;
+	JPanel jPanelRiglt, jPanelLeft;
 	JScrollPane scrollPane;
 	public void initSplitPane() {
-		jPanel1 = new JPanel();
-		jPanel1.setBackground(Color.green);
-		jPanel1.setOpaque(true);
+		jPanelLeft = new JPanel();
+		jPanelLeft.setBackground(Color.pink);
+		jPanelLeft.setOpaque(true);
 
-		jPanel2 = new JPanel();
-		jPanel2.setBackground(Color.pink);
-		jPanel2.setOpaque(true);
+		jPanelRiglt = new JPanel();
+		jPanelRiglt.setBackground(Color.yellow);
 		
-		scrollPane = new JScrollPane();
-		scrollPane.add(jPanel2);
-		scrollPane.setOpaque(true);
-
-		jSplitPaneLeft = new JSplitPane(JSplitPane.VERTICAL_SPLIT, false, scrollPane, jPanel2);
-		jSplitPaneLeft.setDividerLocation(0.3);
-		jSplitPaneLeft.setOneTouchExpandable(true);
-		jSplitPaneLeft.setDividerSize(10);
-
-
-		JPanel jPanel = new JPanel();
-		jPanel.setBackground(Color.yellow);
-		jPanel.setOpaque(true);
-		
-		jSplitPaneV = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, jPanel2, jPanel);
+		jSplitPaneV = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, false, jPanelLeft, jPanelRiglt);
+		jPanelRiglt.setLayout(new CardLayout(0, 0));
 		jFrame.getContentPane().add(jSplitPaneV);
 		
 	}
@@ -155,11 +145,11 @@ public class FeiFeiYuApplication {
 		toolBar.setFloatable(false);
 		toolBar.setEnabled(false);
 		toolBar.setOrientation(SwingConstants.VERTICAL);
-		jPanel2.add(toolBar);
+		jPanelLeft.add(toolBar);
 		
 		jMenuItemOperation = new JMenuItem("Operation");
 		jMenuItemSettings = new JMenuItem("Settings");
-		jMenuItemPreSettings = new JMenuItem("Pre-Settings");
+		jMenuItemPreSettings = new JMenuItem("PreSettings");
 		
 		initMouseAction(jMenuItemOperation);
 		initMouseAction(jMenuItemSettings);
@@ -171,11 +161,137 @@ public class FeiFeiYuApplication {
 	}
 	
 	
+	CardLayout cardLayout;
+	JPanel operationJPanel, settingsJPanel, preSettingsJPanel;
+	private JScrollPane platformScrollPane;
+	private JScrollPane modelScrollPane;
+	private JScrollPane applicationNameScrollPane;
+	private JScrollPane systemPrivateScrollPane;
+	private JScrollPane applicationTypeScrollPane;
+	private JList modelList;
+	private JList systemPrivateList;
+	private JList applicationNameList;
+	private JList applicationTypeList;
+	
+	private JTextArea platformJTextArea, deviceJTextArea, applicationTypeJTextArea, systemPrivateJTextArea, applicationNameJTextArea;
+	public void initSplitPaneRight() {
+		cardLayout = new CardLayout(0, 0);
+		jPanelRiglt.setLayout(cardLayout);
+		
+		operationJPanel = new JPanel();
+		operationJPanel.setBackground(Color.LIGHT_GRAY);
+		operationJPanel.setOpaque(true);
+		
+		settingsJPanel= new JPanel();
+		settingsJPanel.setBackground(Color.orange);
+		settingsJPanel.setOpaque(true);
+		
+		preSettingsJPanel = new JPanel();
+		preSettingsJPanel.setBackground(Color.pink);
+		preSettingsJPanel.setOpaque(true);
+	
+		
+		jPanelRiglt.add(jMenuItemOperation.getName(), operationJPanel);
+		operationJPanel.setLayout(null);
+		
+		platformScrollPane = new JScrollPane();
+		platformScrollPane.setToolTipText("platform");
+		platformScrollPane.setBounds(10, 10, 120, 300);
+		operationJPanel.add(platformScrollPane);
+		
+		JList platformList = new JList();
+		platformScrollPane.setViewportView(platformList);
+		platformList.setFont(new Font("Consolas", Font.PLAIN, 20));
+		platformList.setModel(new AbstractListModel() {
+			String[] values = new String[] {"3128", "3288", "8953", "636", "720"};
+			public int getSize() {
+				return values.length;
+			}
+			public Object getElementAt(int index) {
+				return values[index];
+			}
+		});
+		
+		modelScrollPane = new JScrollPane();
+		modelScrollPane.setBounds(136, 10, 120, 300);
+		operationJPanel.add(modelScrollPane);
+		
+		modelList = new JList();
+		modelScrollPane.setViewportView(modelList);
+		
+		applicationNameScrollPane = new JScrollPane();
+		applicationNameScrollPane.setBounds(396, 10, 120, 300);
+		operationJPanel.add(applicationNameScrollPane);
+		
+		applicationNameList = new JList();
+		applicationNameScrollPane.setViewportView(applicationNameList);
+		
+		systemPrivateScrollPane = new JScrollPane();
+		systemPrivateScrollPane.setBounds(266, 10, 120, 125);
+		operationJPanel.add(systemPrivateScrollPane);
+		
+		systemPrivateList = new JList();
+		systemPrivateScrollPane.setViewportView(systemPrivateList);
+		
+		applicationTypeScrollPane = new JScrollPane();
+		applicationTypeScrollPane.setBounds(266, 180, 120, 130);
+		operationJPanel.add(applicationTypeScrollPane);
+		
+		applicationTypeList = new JList();
+		applicationTypeScrollPane.setViewportView(applicationTypeList);
+		
+		platformJTextArea = new JTextArea();
+		platformJTextArea.setLineWrap(true);
+		platformJTextArea.setText("平台");
+		platformJTextArea.setBounds(10, 316, 120, 29);
+		operationJPanel.add(platformJTextArea);
+		platformJTextArea.setColumns(10);
+		
+		deviceJTextArea = new JTextArea();
+		deviceJTextArea.setText("设备");
+		deviceJTextArea.setColumns(10);
+		deviceJTextArea.setBounds(136, 316, 120, 29);
+		operationJPanel.add(deviceJTextArea);
+		
+		applicationTypeJTextArea = new JTextArea();
+		applicationTypeJTextArea.setText("应用类型");
+		applicationTypeJTextArea.setColumns(10);
+		applicationTypeJTextArea.setBounds(266, 141, 120, 29);
+		operationJPanel.add(applicationTypeJTextArea);
+		
+		systemPrivateJTextArea = new JTextArea();
+		systemPrivateJTextArea.setText("应用私有");
+		systemPrivateJTextArea.setColumns(10);
+		systemPrivateJTextArea.setBounds(266, 316, 120, 29);
+		operationJPanel.add(systemPrivateJTextArea);
+		
+		applicationNameJTextArea = new JTextArea();
+		applicationNameJTextArea.setText("应用名称");
+		applicationNameJTextArea.setColumns(10);
+		applicationNameJTextArea.setBounds(396, 316, 120, 29);
+		operationJPanel.add(applicationNameJTextArea);
+
+		jPanelRiglt.add(jMenuItemSettings.getName(),settingsJPanel);
+		jPanelRiglt.add(jMenuItemPreSettings.getName(), preSettingsJPanel);
+	}
+	
+	public void initOperationJPanel() {
+	}
+	
+	public void initSettingsJPanel() {
+			
+	}
+	
+	public void initPreSettingsJPanel() {
+		
+	}
+	
+	
+	
 	private void initMouseAction(Component component) {
 		if (component instanceof AbstractButton) {
 			AbstractButton button = (AbstractButton)component;
 			ImageIcon icon = new ImageIcon("res/drawable/jiong.png");
-			
 			button.setIcon(ImageUtils.getImageIcon("jiong", 20, 20));
 			
 			component.setName(button.getText());
@@ -184,8 +300,7 @@ public class FeiFeiYuApplication {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO 自动生成的方法存根
-				
+				updateJPanelRight(e.getSource());
 			}
 			
 			@Override
@@ -208,17 +323,21 @@ public class FeiFeiYuApplication {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO 自动生成的方法存根
 				
 			}
 		});
 	}
-
 	
-	public void initSplitPaneRight() {
-		
+	private void updateJPanelRight(final Object object) {
+		if (object != null && object instanceof Component) {
+			Component component = (Component) object;
+			String name = component.getName();
+			System.out.println("mouseClicked: " + name);
+			if (!StringUtils.isNullOrEmpty(name)) {
+				cardLayout.show(jPanelRiglt, name);
+			}
+		}
 	}
-
 
 	private void updateDevices() {
 		String adb = getAdb();
@@ -284,5 +403,4 @@ public class FeiFeiYuApplication {
 		});
 
 	}
-
 }
