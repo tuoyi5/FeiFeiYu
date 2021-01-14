@@ -1,4 +1,4 @@
-package com.arvin.feifeiyu.win;
+package com.arvin.feifeiyu.win.model;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import javax.crypto.spec.DHPrivateKeySpec;
+
+import com.arvin.feifeiyu.win.listener.CommandListener;
 
 public class CommandLineProgram {
 	public static final String ERROR = "ERROR";

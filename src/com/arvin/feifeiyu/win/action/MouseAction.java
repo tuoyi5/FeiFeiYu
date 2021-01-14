@@ -1,4 +1,4 @@
-package com.arvin.feifeiyu.win;
+package com.arvin.feifeiyu.win.action;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -8,6 +8,8 @@ import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+
+import com.arvin.feifeiyu.win.util.StringUtils;
 
 public class MouseAction extends MouseAdapter{
 	private static HashMap<String, MouseAction> mouseActionHashMap = new HashMap<>();

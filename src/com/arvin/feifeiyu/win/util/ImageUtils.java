@@ -1,4 +1,4 @@
-package com.arvin.feifeiyu.win;
+package com.arvin.feifeiyu.win.util;
 
 import java.awt.Image;
 

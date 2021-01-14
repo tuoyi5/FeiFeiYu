@@ -8,9 +8,23 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import com.jgoodies.forms.layout.FormLayout;
+import com.arvin.feifeiyu.win.action.MouseAction;
+import com.arvin.feifeiyu.win.listener.CommandListener;
+import com.arvin.feifeiyu.win.model.AppPathManager;
+import com.arvin.feifeiyu.win.model.CommandLineProgram;
+import com.arvin.feifeiyu.win.model.AppPathManager.ApplicationName;
+import com.arvin.feifeiyu.win.model.AppPathManager.ApplicationType;
+import com.arvin.feifeiyu.win.model.AppPathManager.Devices;
+import com.arvin.feifeiyu.win.model.AppPathManager.Platform;
+import com.arvin.feifeiyu.win.model.AppPathManager.SystemPrivate;
+import com.arvin.feifeiyu.win.util.ImageUtils;
+import com.arvin.feifeiyu.win.util.StringUtils;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
@@ -21,6 +35,7 @@ import java.awt.Component;
 
 import javax.swing.border.LineBorder;
 import javax.swing.JList;
+import javax.security.auth.callback.ConfirmationCallback;
 import javax.swing.AbstractButton;
 import javax.swing.AbstractListModel;
 import javax.swing.JMenuBar;
@@ -102,6 +117,7 @@ public class FeiFeiYuApplication {
 		initOperationJPanel();
 		initSettingsJPanel();
 		initPreSettingsJPanel();
+		updatePlatformList();
 	}
 	
 	public void initBar() {
@@ -168,12 +184,19 @@ public class FeiFeiYuApplication {
 	private JScrollPane applicationNameScrollPane;
 	private JScrollPane systemPrivateScrollPane;
 	private JScrollPane applicationTypeScrollPane;
-	private JList modelList;
-	private JList systemPrivateList;
-	private JList applicationNameList;
-	private JList applicationTypeList;
 	
-	private JTextArea platformJTextArea, deviceJTextArea, applicationTypeJTextArea, systemPrivateJTextArea, applicationNameJTextArea;
+	private JList<String> platformList;
+	private JList<String> modelList;
+	private JList<String> systemPrivateList;
+	private JList<String> applicationNameList;
+	private JList<String> applicationTypeList;
+	
+	private JTextField platformTextField;
+	private JTextField deviceTextField;
+	private JTextField applicationTypeTextField;
+	private JTextField systemPrivateTextField;
+	private JTextField applicationNameTextField;
+	
 	public void initSplitPaneRight() {
 		cardLayout = new CardLayout(0, 0);
 		jPanelRiglt.setLayout(cardLayout);
@@ -199,7 +222,11 @@ public class FeiFeiYuApplication {
 		platformScrollPane.setBounds(10, 10, 120, 300);
 		operationJPanel.add(platformScrollPane);
 		
-		JList platformList = new JList();
+		
+	}
+	
+	public void initOperationJPanel() {
+		platformList = new JList();
 		platformScrollPane.setViewportView(platformList);
 		platformList.setFont(new Font("Consolas", Font.PLAIN, 20));
 		platformList.setModel(new AbstractListModel() {
@@ -240,42 +267,48 @@ public class FeiFeiYuApplication {
 		applicationTypeList = new JList();
 		applicationTypeScrollPane.setViewportView(applicationTypeList);
 		
-		platformJTextArea = new JTextArea();
-		platformJTextArea.setLineWrap(true);
-		platformJTextArea.setText("平台");
-		platformJTextArea.setBounds(10, 316, 120, 29);
-		operationJPanel.add(platformJTextArea);
-		platformJTextArea.setColumns(10);
+		platformTextField = new JTextField();
+		platformTextField.setEditable(false);
+		platformTextField.setText("平台");
+		platformTextField.setBounds(10, 316, 120, 29);
+		platformTextField.setHorizontalAlignment(JTextField.CENTER);
+		operationJPanel.add(platformTextField);
+		platformTextField.setColumns(10);
 		
-		deviceJTextArea = new JTextArea();
-		deviceJTextArea.setText("设备");
-		deviceJTextArea.setColumns(10);
-		deviceJTextArea.setBounds(136, 316, 120, 29);
-		operationJPanel.add(deviceJTextArea);
+		deviceTextField = new JTextField();
+		deviceTextField.setEditable(false);
+		deviceTextField.setText("设备");
+		deviceTextField.setColumns(10);
+		deviceTextField.setBounds(136, 316, 120, 29);
+		deviceTextField.setHorizontalAlignment(JTextField.CENTER);
+		operationJPanel.add(deviceTextField);
 		
-		applicationTypeJTextArea = new JTextArea();
-		applicationTypeJTextArea.setText("应用类型");
-		applicationTypeJTextArea.setColumns(10);
-		applicationTypeJTextArea.setBounds(266, 141, 120, 29);
-		operationJPanel.add(applicationTypeJTextArea);
+		applicationTypeTextField = new JTextField();
+		applicationTypeTextField.setEditable(false);
+		applicationTypeTextField.setText("应用类型");
+		applicationTypeTextField.setColumns(10);
+		applicationTypeTextField.setBounds(266, 141, 120, 29);
+		applicationTypeTextField.setHorizontalAlignment(JTextField.CENTER);
+		operationJPanel.add(applicationTypeTextField);
 		
-		systemPrivateJTextArea = new JTextArea();
-		systemPrivateJTextArea.setText("应用私有");
-		systemPrivateJTextArea.setColumns(10);
-		systemPrivateJTextArea.setBounds(266, 316, 120, 29);
-		operationJPanel.add(systemPrivateJTextArea);
+		systemPrivateTextField = new JTextField();
+		systemPrivateTextField.setEditable(false);
+		systemPrivateTextField.setText("应用私有");
+		systemPrivateTextField.setColumns(10);
+		systemPrivateTextField.setBounds(266, 316, 120, 29);
+		systemPrivateTextField.setHorizontalAlignment(JTextField.CENTER);
+		operationJPanel.add(systemPrivateTextField);
 		
-		applicationNameJTextArea = new JTextArea();
-		applicationNameJTextArea.setText("应用名称");
-		applicationNameJTextArea.setColumns(10);
-		applicationNameJTextArea.setBounds(396, 316, 120, 29);
-		operationJPanel.add(applicationNameJTextArea);
+		applicationNameTextField = new JTextField();
+		applicationNameTextField.setEditable(false);
+		applicationNameTextField.setText("应用名称");
+		applicationNameTextField.setColumns(10);
+		applicationNameTextField.setBounds(396, 316, 120, 29);
+		applicationNameTextField.setHorizontalAlignment(JTextField.CENTER);
+		operationJPanel.add(applicationNameTextField);
 
 		jPanelRiglt.add(jMenuItemSettings.getName(),settingsJPanel);
 		jPanelRiglt.add(jMenuItemPreSettings.getName(), preSettingsJPanel);
-	}
-	
-	public void initOperationJPanel() {
 	}
 	
 	public void initSettingsJPanel() {
@@ -285,8 +318,6 @@ public class FeiFeiYuApplication {
 	public void initPreSettingsJPanel() {
 		
 	}
-	
-	
 	
 	private void initMouseAction(Component component) {
 		if (component instanceof AbstractButton) {
@@ -403,4 +434,155 @@ public class FeiFeiYuApplication {
 		});
 
 	}
+	
+	private void updatePlatformList() {
+		HashMap<String, Platform> hashMap = AppPathManager.getAppPathManager().platformMap;
+		ArrayList<String> arrayList = new ArrayList<>();
+		Iterator<String> iterator = hashMap.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = iterator.next();
+			 arrayList.add(key);
+		}
+		
+		platformList.setModel(new AbstractListModel<String>() {
+			
+			public int getSize() {
+				return arrayList.size();
+			}
+			public String getElementAt(int index) {
+				arrayList.get(index);
+				return null;
+			}
+		});
+		
+		platformList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				updateDeviceList(platformList.getSelectedValue());
+			}
+		});
+	}
+	
+	private void updateDeviceList(String platform) {
+		HashMap<String, Devices> hashMap = AppPathManager.getAppPathManager().deviceMap;
+		ArrayList<Devices> arrayList = new ArrayList<>();
+		Iterator<Devices> iterator = hashMap.values().iterator();
+		while (iterator.hasNext()) {
+			Devices devices = iterator.next();
+			if (devices.getPlatform().getName().equals(platform)) {
+				arrayList.add(devices);
+			}
+		}
+		
+		deviceList.setModel(new AbstractListModel<String>() {
+
+			@Override
+			public int getSize() {
+				// TODO 自动生成的方法存根
+				return arrayList.size();
+			}
+
+			@Override
+			public String getElementAt(int index) {
+				// TODO 自动生成的方法存根
+				return arrayList.get(index).getName();
+			}
+		});
+		deviceList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				updateApplicationType();
+			}
+		});
+	}
+	
+	private void updateApplicationType() {
+		HashMap<String, ApplicationType> hashMap = AppPathManager.getAppPathManager().applicationTypeMap;
+		applicationTypeList.setModel(new AbstractListModel<String>() {
+
+			public int getSize() {
+				return hashMap.size();
+			}
+			public String getElementAt(int index) {
+				Iterator<String> iterator = hashMap.keySet().iterator();
+				for (int i = 0; iterator.hasNext(); i++) {
+					 Object key = iterator.next();
+					 return (String)key;
+				}
+				return null;
+			}
+		});
+		applicationTypeList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				String name = applicationTypeList.getSelectedValue();
+				updateSystemPrivate(name);
+				updateApplicationName(name);
+			}
+		});
+	}
+	
+	private void updateSystemPrivate(String type) {
+		HashMap<String, SystemPrivate> hashMap = AppPathManager.getAppPathManager().systemPrivateMap;
+		Iterator<SystemPrivate> iterator = hashMap.values().iterator();
+		ArrayList<String> arrayList = new ArrayList<>();
+		while (iterator.hasNext()) {
+			SystemPrivate systemPrivate = iterator.next();
+			if (systemPrivate.getApplicationType().getType().equals(type)) {
+				if (type.equals("system") ) {
+					arrayList.add(systemPrivate.getSystemPrivate());
+				} else if (type.equals("onyx")) {
+					for(String confusion: systemPrivate.getConfusion()) {
+						arrayList.add(confusion);
+					}
+				}
+			}
+		}
+		
+		systemPrivateList.setModel(new AbstractListModel<String>() {
+
+			@Override
+			public int getSize() {
+				// TODO 自动生成的方法存根
+				return arrayList.size();
+			}
+
+			@Override
+			public String getElementAt(int index) {
+				// TODO 自动生成的方法存根
+				return arrayList.get(index);
+			}
+		});	
+		
+	}
+	
+	public void updateApplicationName(String type) {
+		HashMap<String, ApplicationName> hashMap = AppPathManager.getAppPathManager().applicationNameMap;
+		Iterator<ApplicationName> iterator = hashMap.values().iterator();
+		ArrayList<String> arrayList = new ArrayList<>();
+		while (iterator.hasNext()) {
+			ApplicationName applicationName = iterator.next();
+			if (applicationName.getSystemPrivate().getApplicationType().equals(type)) {
+				arrayList.add(applicationName.getName());
+			}
+		}
+		applicationNameList.setModel(new AbstractListModel<String>() {
+
+			@Override
+			public int getSize() {
+				// TODO 自动生成的方法存根
+				return arrayList.size();
+			}
+
+			@Override
+			public String getElementAt(int index) {
+				// TODO 自动生成的方法存根
+				return arrayList.get(index);
+			}
+		});
+		
+		
+	}
+	
+	
 }
