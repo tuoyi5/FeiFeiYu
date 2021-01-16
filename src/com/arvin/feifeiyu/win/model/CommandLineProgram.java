@@ -10,30 +10,29 @@ import javax.crypto.spec.DHPrivateKeySpec;
 import com.arvin.feifeiyu.win.listener.CommandListener;
 
 public class CommandLineProgram {
-	public static final String ERROR = "ERROR";
-	public static final String STDOUT = "STDOUT";
+	public static final String ERROR = "error";
+	public static final String STDOUT = "stdout";
+	public static final String FINISH = "finish";
 	
 	public String run(String command, CommandListener listener) {
 		System.out.println("run: command: " + command);
 		Process process;
-		String resultstr = null;
 		try {
 			process = Runtime.getRuntime().exec(command);
 			StreamThread errorStreamThread = new StreamThread();
-			errorStreamThread.setInputStream(process.getErrorStream()).setType("ERROR").setCommandListener(listener);
+			errorStreamThread.setInputStream(process.getErrorStream()).setType(ERROR).setCommandListener(listener);
 			errorStreamThread.start();
 			
             StreamThread outStreamThread = new StreamThread();
-            outStreamThread.setInputStream(process.getInputStream()).setType("STDOUT").setCommandListener(listener);
+            outStreamThread.setInputStream(process.getInputStream()).setType(STDOUT).setCommandListener(listener);
             outStreamThread.start();
             
     	} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 		} finally {
-			System.out.println(resultstr);
+			return null;
 		}
-		return resultstr;
 	}
 
 	public class StreamThread extends Thread {
@@ -78,7 +77,7 @@ public class CommandLineProgram {
 					String line = null;
 					StringBuilder stringBuilder = new StringBuilder();
 					while ( (line = br.readLine()) != null)  {
-    	                System.out.println("pring > " + type + " : " + line);
+    	                System.out.println("print >>>>>> " + type + " : " + line);
     	                stringBuilder.append(line);
     	                if (type.equals(STDOUT) && commandListener != null) {
     	                	commandListener.onLineListener(type, line);
@@ -87,8 +86,11 @@ public class CommandLineProgram {
 					if (type.equals(ERROR) && commandListener != null) {
 						commandListener.onLineListener(type, stringBuilder.toString());
     	            }
+					
     	        } catch (IOException io) {
     	            io.printStackTrace();
+    	        } catch (Exception e) {
+    	        	e.printStackTrace();
     	        } finally {
     	            try {
     	                br.close();
@@ -97,6 +99,9 @@ public class CommandLineProgram {
     	                
     	            }
     	        }
+    		   if (commandListener != null) {
+					commandListener.onLineListener(FINISH, null);
+	            }
     	}
 	}
 

@@ -1,0 +1,136 @@
+{
+  "platforms":[
+    {
+      "name":"RK3128",
+      "dir":"Z:\\3128_android_rom\\out\\target\\product\\",
+      "models":[
+        "MC_C68CTM",
+        "MC_C68PCTM",
+        "MC_DARWIN6",
+        "MC_DARWIN7",
+        "MC_Caesar3",
+        "MC_Caesar4",
+        "MC_Cristo4",
+        "MC_Cristo5",
+        "MC_FAUST",
+        "MC_FAUST2",
+        "MC_Viking",
+        "LIVINGSTONE",
+        "MC_SILVER",
+        "VOLTA",
+        "VOLTA2",
+        "MyFirstBook",
+        "MC_C68",
+        "MC_C68S"
+      ]
+    },
+    {
+      "name":"RK_3288",
+      "dir":"Z:\\3288_android_rom\\out\\target\\product\\",
+      "models": [
+        "MC_EUCLID",
+        "MC_EUCLID_S",
+        "MC_GULLIVER",
+        "MC_Max2",
+        "MC_Max2Pro",
+        "MC_Note",
+        "MC_NotePro",
+        "MC_NoteS",
+        "MC_NoteSL",
+        "MC_NovaPlus",
+        "MC_NovaPro",
+        "MC_THOR"
+      ]
+    },
+    {
+      "name":"SDM_8953",
+      "dir":"Z:\\msm8953_android_rom\\android\\out\\target\\product\\",
+      "models": [
+        "Poke2Color",
+        "KON_TIKI"
+      ]
+    },
+    {
+      "name":"SDM_636",
+      "dir":"Z:\\sdm636_android_rom\\android\\out\\target\\product\\",
+      "models": [
+        "KON_TIKI2",
+        "Lomonosov"
+      ]
+    }
+  ],
+
+  "application": {
+    "system": {
+      "framework": [],
+      "priv-app": [
+        "SystemUI",
+        "SystemUIWithLegacyRecents",
+        "Settings",
+        "SettingsProvider"
+      ],
+      "app": [
+        "Browser",
+        "Email",
+        "SoundRecorder",
+        "Bluetooth",
+        "Music",
+        "DownloadProviderUi",
+        "SystemPrivate"
+      ]
+    },
+    "onyx": {
+      "ereader": {
+        "path": "C:\\WorkSpac\\onyx\\kepler\\android\\kreader\\app\\ereader\\**\\build\\outputs\\apk\\",
+        "app": [
+          "kcb",
+          "kreader2",
+          "knote2",
+          "floatingbutton",
+          "app-market"
+        ],
+        "confusion": [
+          "debug",
+          "release"
+        ]
+      },
+      "common": {
+        "path": "C:\\WorkSpac\\onyx\\kepler\\android\\kreader\\app\\common\\**\\build\\outputs\\apk\\",
+        "app": [
+          "OnyxIME",
+          "dict",
+          "monitor",
+          "ProductionTest"
+        ],
+        "confusion": [
+          "debug",
+          "release"
+        ]
+      },
+      "sample": {
+        "path":"C:\\WorkSpac\\onyx\\OnyxAndroidSample\\app\\**\\build\\outputs\\apk\\",
+        "app": [
+          "music",
+          "deskclock",
+          "calculator",
+          "dialer",
+          "OnyxLatinIME"
+        ],
+        "confusion": [
+          "debug",
+          "release"
+        ]
+      },
+      "alreader": {
+        "path": "C:\\WorkSpac\\onyx\\alreader\\**\\build\\outputs\\apk\\",
+        "app": [
+          "alreader3"
+        ],
+        "confusion": [
+          "debug",
+          "release"
+        ]
+      }
+    }
+  }
+}
